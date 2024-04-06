@@ -1,22 +1,33 @@
 plugins {
-    alias(libs.plugins.licenser) apply false
+    id 'java'
+    id 'maven-publish'
+    id 'org.cadixdev.licenser' version '0.6.1'
 }
 
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 defaultTasks 'licenseFormat', 'build'
+
+allprojects {
+    group = 'me.lucko.luckperms'
+    version = '5.4-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://repo.lucko.me/' }
+        maven { url 'https://libraries.minecraft.net/' }
+    }
+}
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: 'org.cadixdev.licenser'
 
-    group = 'me.lucko.luckperms'
-    version = '5.4-SNAPSHOT'
-
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
@@ -24,8 +35,8 @@ subprojects {
 
     tasks.withType(Test).configureEach {
         testLogging {
-            events = [TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED]
-            exceptionFormat = TestExceptionFormat.FULL
+            events = [org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED]
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
             showExceptions = true
             showCauses = true
             showStackTraces = true
@@ -37,37 +48,29 @@ subprojects {
     }
 
     def determinePatchVersion = {
-        // get the name of the last tag
         def tagInfo = new ByteArrayOutputStream()
         exec {
             commandLine 'git', 'describe', '--tags'
             standardOutput = tagInfo
         }
-        tagInfo = tagInfo.toString()
-
+        tagInfo = tagInfo.toString().trim()
         if (!tagInfo.contains('-')) {
             return 0
         }
         return tagInfo.split("-")[1]
     }
 
-    project.ext.majorVersion = '5'
-    project.ext.minorVersion = '4'
-    project.ext.patchVersion = determinePatchVersion()
-    project.ext.apiVersion = project.ext.majorVersion + '.' + project.ext.minorVersion
-    project.ext.fullVersion = project.ext.apiVersion + '.' + project.ext.patchVersion
+    ext {
+        majorVersion = '5'
+        minorVersion = '4'
+        patchVersion = determinePatchVersion()
+        apiVersion = "${majorVersion}.${minorVersion}"
+        fullVersion = "${apiVersion}.${patchVersion}"
+    }
 
     license {
         header = rootProject.file('HEADER.txt')
         include '**/*.java'
         newLine = true
-    }
-
-    repositories {
-        mavenCentral()
-        maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-        maven { url 'https://repo.lucko.me/' }
-        maven { url 'https://libraries.minecraft.net/' }
     }
 }
