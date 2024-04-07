@@ -1,10 +1,14 @@
+plugins {
+    id 'java'
+}
+
 group = 'net.luckperms'
 
 project.version = '5.4'
 
 dependencies {
-    compileOnly 'org.checkerframework:checker-qual:3.21.2'
-    compileOnly 'org.jetbrains:annotations:23.1.0'
+    compileClasspath 'org.checkerframework:checker-qual:3.21.2'
+    compileClasspath 'org.jetbrains:annotations:23.1.0'
 }
 
 java {
