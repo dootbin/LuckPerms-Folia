@@ -1,8 +1,7 @@
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
-    alias(libs.plugins.shadow)
-    alias(libs.plugins.loom)
+    id 'java'
+    id 'fabric-loom' version '1.4.6'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 archivesBaseName = 'luckperms'
@@ -12,16 +11,15 @@ repositories {
 }
 
 dependencies {
-    // https://modmuss50.me/fabric.html
     minecraft 'com.mojang:minecraft:1.20.4'
     mappings 'net.fabricmc:yarn:1.20.4+build.1:v2'
     modImplementation 'net.fabricmc:fabric-loader:0.15.1'
 
     Set<String> apiModules = [
-            'fabric-api-base',
-            'fabric-command-api-v2',
-            'fabric-lifecycle-events-v1',
-            'fabric-networking-api-v1'
+        'fabric-api-base',
+        'fabric-command-api-v2',
+        'fabric-lifecycle-events-v1',
+        'fabric-networking-api-v1'
     ]
 
     apiModules.forEach {
@@ -42,15 +40,12 @@ processResources {
 
 shadowJar {
     archiveFileName = "luckpermsfabric-${project.ext.fullVersion}-dev.jar"
-
     dependencies {
         exclude('net.fabricmc:.*')
         include(dependency('net.luckperms:.*'))
         include(dependency('me.lucko.luckperms:.*'))
-        // We don't want to include the mappings in the jar do we?
         exclude '/mappings/*'
     }
-
     relocate 'net.kyori.adventure', 'me.lucko.luckperms.lib.adventure'
     relocate 'net.kyori.event', 'me.lucko.luckperms.lib.eventbus'
     relocate 'com.github.benmanes.caffeine', 'me.lucko.luckperms.lib.caffeine'
@@ -72,7 +67,7 @@ shadowJar {
     relocate 'org.yaml.snakeyaml', 'me.lucko.luckperms.lib.yaml'
 }
 
-task remappedShadowJar(type: RemapJarTask) {
+task remappedShadowJar(type: net.fabricmc.loom.task.RemapJarTask) {
     dependsOn tasks.shadowJar
     input = tasks.shadowJar.archiveFile
     addNestedDependencies = true
