@@ -1,12 +1,12 @@
 plugins {
-    alias(libs.plugins.shadow)
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
+    mavenCentral()
     maven { url 'https://repo.papermc.io/repository/maven-public/' }
 }
-
-disableAutoTargetJvm()
 
 dependencies {
     implementation project(':common')
@@ -25,7 +25,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = 'luckperms-bukkit.jarinjar'
+    archiveFileName = 'luckperms-bukkit-5.4-SNAPSHOT.jar'
     dependencies {
         include(dependency('me.lucko.luckperms:.*'))
     }
