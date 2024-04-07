@@ -7,14 +7,15 @@ group = 'net.luckperms'
 project.version = '5.4'
 
 dependencies {
-    compileClasspath 'org.checkerframework:checker-qual:3.21.2'
-    compileClasspath 'org.jetbrains:annotations:23.1.0'
+    implementation 'org.checkerframework:checker-qual:3.21.2'
+    implementation 'org.jetbrains:annotations:23.1.0'
 }
 
 java {
     withJavadocJar()
     withSourcesJar()
 }
+
 
 // Only used occasionally for deployment - not needed for normal builds.
 /*
