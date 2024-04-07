@@ -53,6 +53,7 @@ processResources {
     from('src/main/resources') {
         include 'plugin.yml'
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 artifacts {
