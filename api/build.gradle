@@ -1,44 +1,43 @@
+plugins {
+    id 'java'
+}
+
 group = 'net.luckperms'
+
 project.version = '5.4'
 
-jar {
-    manifest {
-        attributes('Automatic-Module-Name': 'net.luckperms.api')
-    }
+dependencies {
+    implementation 'org.checkerframework:checker-qual:3.21.2'
+    implementation 'org.jetbrains:annotations:23.1.0'
 }
 
-dependencies {
-    compileOnly 'org.checkerframework:checker-qual:3.21.2'
-    compileOnly 'org.jetbrains:annotations:23.1.0'
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
+
 
 // Only used occasionally for deployment - not needed for normal builds.
 /*
 if (project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
     apply plugin: 'signing'
-
+    
     javadoc {
         title = 'LuckPerms API (v' + project.ext.apiVersion + ')'
         options.overview = 'javadoc/overview.html'
         options.encoding = 'UTF-8'
         options.charSet = 'UTF-8'
         options.links(
-                'https://checkerframework.org/api/',
-                'https://javadoc.io/static/org.jetbrains/annotations/23.0.0/'
+            'https://checkerframework.org/api/',
+            'https://javadoc.io/static/org.jetbrains/annotations/23.0.0/'
         )
         options.addStringOption('Xdoclint:none', '-quiet')
         options.addStringOption('-since', '5.0,5.1,5.2,5.3,5.4,5.5')
-
         if (JavaVersion.current() > JavaVersion.VERSION_1_8) {
             options.links.add('https://docs.oracle.com/en/java/javase/11/docs/api/')
         } else {
             options.links.add('https://docs.oracle.com/javase/8/docs/api/')
         }
-    }
-
-    java {
-        withJavadocJar()
-        withSourcesJar()
     }
 
     publishing {
@@ -47,32 +46,26 @@ if (project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePass
                 def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
                 def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
                 credentials {
                     username sonatypeUsername
                     password sonatypePassword
                 }
             }
         }
-
         publications {
             mavenJava(MavenPublication) {
                 artifactId = 'api'
-
                 from components.java
-
                 pom {
                     name = 'LuckPerms API'
                     description = 'A permissions plugin for Minecraft servers.'
                     url = 'https://luckperms.net'
-
                     licenses {
                         license {
                             name = 'MIT'
                             url = 'https://opensource.org/licenses/MIT'
                         }
                     }
-
                     developers {
                         developer {
                             id = 'lucko'
@@ -81,13 +74,11 @@ if (project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePass
                             email = 'git@lucko.me'
                         }
                     }
-
                     scm {
                         connection = 'scm:git:https://github.com/LuckPerms/LuckPerms.git'
                         developerConnection = 'scm:git:git@github.com:LuckPerms/LuckPerms.git'
                         url = 'https://github.com/LuckPerms/LuckPerms'
                     }
-
                     issueManagement {
                         system = 'GitHub'
                         url = 'https://github.com/LuckPerms/LuckPerms/issues'

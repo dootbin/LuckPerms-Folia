@@ -140,7 +140,7 @@ public class LuckPermsMessagingService implements InternalMessagingService, Inco
 
     @Override
     public void pushCustomPayload(String channelId, String payload) {
-        this.plugin.getBootstrap().getScheduler().executeAsync(() -> {
+        this.plugin.getBootstrap().getScheduler().async(() -> {
             UUID requestId = generatePingId();
             this.messenger.sendOutgoingMessage(new CustomMessageImpl(requestId, channelId, payload));
         });

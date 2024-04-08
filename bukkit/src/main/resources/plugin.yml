@@ -1,0 +1,7 @@
+name: LuckPerms-folia
+version: 5.4-SNAPSHOT
+main: me.lucko.luckperms.bukkit.LPBukkitBootstrap
+api-version: 1.20
+authors: [dootbin]
+description: A permissions plugin for Folia Minecraft servers.
+website: https://luckperms.net
